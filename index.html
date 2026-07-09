@@ -73,11 +73,12 @@
   .stage{ 
     position:relative; 
     width:100%; 
+    min-height:300px;
     background:#0d0f11; 
     overflow:hidden; 
     border:1px solid var(--line);
   }
-  .stage img{ width:100%; display:block; height:auto; }
+  .stage img{ width:100%; display:block; height:auto; min-height:280px; object-fit:contain; }
   .stage svg{ position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; }
   
   .view{ display:none; }
@@ -114,4 +115,223 @@
   .resetbtn:hover{ border-color:var(--orange); color:var(--orange); }
   .specbar{
     display:flex; flex-wrap:wrap; border-top:1px solid var(--line);
-    font-
+    font-family:'IBM Plex Mono',monospace;
+  }
+  .spec{ flex:1 1 140px; padding:14px 18px; border-right:1px solid var(--line); }
+  .spec:last-child{ border-right:none; }
+  .spec .k{ font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; }
+  .spec .v{ font-size:17px; color:var(--yellow); margin-top:4px; }
+  .footer-note{
+    padding:12px 24px; font-size:11px; color:var(--muted);
+    font-family:'IBM Plex Mono',monospace; border-top:1px solid var(--line);
+  }
+  @media(max-width:860px){
+    .controls-panel{ flex:1 1 100%; border-top:1px solid var(--line); }
+    .drawing-panel{ border-right:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+  <div class="titleblock">
+    <h1>TRITON ML <span>STANCE SHEET</span></h1>
+    <div class="docnum">REAL PHOTO OVERLAY — WHEEL / TYRE / OFFSET PREVIEW</div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" id="tabSide" onclick="switchTab('side')">Side profile</button>
+    <button class="tab" id="tabFront" onclick="switchTab('front')">Front — offset</button>
+  </div>
+
+  <div class="body-layout">
+    <div class="drawing-panel">
+
+      <div id="sideView" class="view active">
+        <div class="stage">
+          <img id="sideImg" src="./triton-side.png" alt="Triton ML Side Cutout">
+          <svg viewBox="0 0 1000 667" preserveAspectRatio="xMidYMid meet">
+            <g id="sideOverlay">
+              <circle id="frontWheel" cx="815" cy="390" r="105" fill="rgba(242,193,78,0.15)" stroke="#F2C14E" stroke-width="4" stroke-dasharray="8,6"/>
+              <circle cx="815" cy="390" r="6" fill="#E8611C"/>
+              
+              <circle id="rearWheel" cx="218" cy="390" r="105" fill="rgba(242,193,78,0.15)" stroke="#F2C14E" stroke-width="4" stroke-dasharray="8,6"/>
+              <circle cx="218" cy="390" r="6" fill="#E8611C"/>
+            </g>
+          </svg>
+        </div>
+        <div class="hint"><b>SIDE VIEW:</b> Adjust suspension lift and tyre size to calculate clearance and arch gap.</div>
+      </div>
+
+      <div id="frontView" class="view">
+        <div class="stage">
+          <img id="frontImg" src="./triton-front.jpg" alt="Triton ML Front View">
+          <svg viewBox="0 0 622 390" preserveAspectRatio="xMidYMid meet">
+            <g id="frontOverlay">
+              <line id="leftOffset" x1="125" y1="260" x2="125" y2="380" stroke="#E8611C" stroke-width="8" stroke-linecap="round"/>
+              <line id="rightOffset" x1="495" y1="260" x2="495" y2="380" stroke="#E8611C" stroke-width="8" stroke-linecap="round"/>
+            </g>
+          </svg>
+        </div>
+        <div class="hint"><b>FRONT VIEW:</b> Adjust wheel offset (ET) and rim width to preview track poke and scrub lines.</div>
+      </div>
+
+    </div>
+
+    <div class="controls-panel">
+      <div class="field">
+        <label>Lift Kit <span class="val" id="liftVal">2" (50mm)</span></label>
+        <input type="range" id="liftSlider" min="0" max="4" step="0.5" value="2" oninput="updateSpecs()">
+      </div>
+
+      <div class="field">
+        <label>Tyre Diameter <span class="val" id="tyreVal">31" (265/70R16)</span></label>
+        <select id="tyreSelect" onchange="updateSpecs()">
+          <option value="30">30" (Stock / 245/70R16)</option>
+          <option value="31" selected>31" (265/70R16)</option>
+          <option value="32">32" (265/75R16)</option>
+          <option value="33">33" (285/75R16)</option>
+        </select>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="field">
+        <label>Wheel Offset (ET) <span class="val" id="offsetVal">ET+38 (Stock)</span></label>
+        <input type="range" id="offsetSlider" min="-20" max="45" step="5" value="38" oninput="updateSpecs()">
+      </div>
+
+      <div class="field">
+        <label>Rim Width <span class="val" id="widthVal">7.0"</span></label>
+        <select id="widthSelect" onchange="updateSpecs()">
+          <option value="7" selected>7.0" (Stock Spec)</option>
+          <option value="8">8.0" (Aftermarket)</option>
+          <option value="9">9.0" (Wide Stance)</option>
+        </select>
+      </div>
+
+      <button class="resetbtn" onclick="resetForm()">Reset All Specs</button>
+    </div>
+  </div>
+
+  <div class="specbar">
+    <div class="spec">
+      <div class="k">Est. Clearance Gain</div>
+      <div class="v" id="clearanceOut">+63 mm</div>
+    </div>
+    <div class="spec">
+      <div class="k">Track Shift / Side</div>
+      <div class="v" id="trackOut">0 mm</div>
+    </div>
+    <div class="spec">
+      <div class="k">Arch Scrub Risk</div>
+      <div class="v" id="scrubOut" style="color: #5B8AA6;">LOW</div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    * Visual parameters are calculated relative to factory Mitsubishi Triton ML specs (ET+38, 30" Stock Tyre).
+  </div>
+</div>
+
+<script>
+  // Tab Navigation
+  function switchTab(viewName) {
+    document.getElementById('sideView').classList.remove('active');
+    document.getElementById('frontView').classList.remove('active');
+    document.getElementById('tabSide').classList.remove('active');
+    document.getElementById('tabFront').classList.remove('active');
+
+    if (viewName === 'side') {
+      document.getElementById('sideView').classList.add('active');
+      document.getElementById('tabSide').classList.add('active');
+    } else {
+      document.getElementById('frontView').classList.add('active');
+      document.getElementById('tabFront').classList.add('active');
+    }
+  }
+
+  // Calibration Core
+  function updateSpecs() {
+    var liftSlider = document.getElementById('liftSlider');
+    var tyreSelect = document.getElementById('tyreSelect');
+    var offsetSlider = document.getElementById('offsetSlider');
+    var widthSelect = document.getElementById('widthSelect');
+
+    var liftInches = parseFloat(liftSlider.value) || 0;
+    var tyreInches = parseFloat(tyreSelect.value) || 30;
+    var offsetMm = parseInt(offsetSlider.value) || 38;
+    var widthInches = parseFloat(widthSelect.value) || 7;
+
+    // Display Text Updates
+    document.getElementById('liftVal').textContent = liftInches + '" (' + (liftInches * 25) + 'mm)';
+    document.getElementById('tyreVal').textContent = tyreSelect.options[tyreSelect.selectedIndex].text;
+    document.getElementById('offsetVal').textContent = 'ET' + (offsetMm >= 0 ? '+' : '') + offsetMm;
+    document.getElementById('widthVal').textContent = widthInches.toFixed(1) + '"';
+
+    // Math Calculations
+    var tyreRadiusGainMm = (tyreInches - 30) * 12.7;
+    var totalClearanceGainMm = Math.round((liftInches * 25) + tyreRadiusGainMm);
+    var trackShiftMm = 38 - offsetMm;
+
+    document.getElementById('clearanceOut').textContent = '+' + totalClearanceGainMm + ' mm';
+    document.getElementById('trackOut').textContent = (trackShiftMm >= 0 ? '+' : '') + trackShiftMm + ' mm';
+
+    // Scrub Risk Logic
+    var scrubOut = document.getElementById('scrubOut');
+    if (tyreInches >= 33 || offsetMm < 0) {
+      scrubOut.textContent = "HIGH (Trimming Req.)";
+      scrubOut.style.color = "#E8611C";
+    } else if (tyreInches >= 32 || offsetMm < 15) {
+      scrubOut.textContent = "MODERATE";
+      scrubOut.style.color = "#F2C14E";
+    } else {
+      scrubOut.textContent = "LOW";
+      scrubOut.style.color = "#5B8AA6";
+    }
+
+    // SVG Drawing Updates
+    var frontWheel = document.getElementById('frontWheel');
+    var rearWheel = document.getElementById('rearWheel');
+    var leftOffset = document.getElementById('leftOffset');
+    var rightOffset = document.getElementById('rightOffset');
+
+    if (frontWheel && rearWheel) {
+      var newRadius = 105 + (tyreInches - 30) * 8;
+      var newCenterY = 390 + (liftInches * 7);
+      frontWheel.setAttribute('r', newRadius);
+      frontWheel.setAttribute('cy', newCenterY);
+      rearWheel.setAttribute('r', newRadius);
+      rearWheel.setAttribute('cy', newCenterY);
+    }
+
+    if (leftOffset && rightOffset) {
+      var pokeOffset = (38 - offsetMm) * 0.7;
+      var strokeWidth = 8 + (widthInches - 7) * 3;
+
+      leftOffset.setAttribute('x1', 125 - pokeOffset);
+      leftOffset.setAttribute('x2', 125 - pokeOffset);
+      leftOffset.setAttribute('stroke-width', strokeWidth);
+
+      rightOffset.setAttribute('x1', 495 + pokeOffset);
+      rightOffset.setAttribute('x2', 495 + pokeOffset);
+      rightOffset.setAttribute('stroke-width', strokeWidth);
+    }
+  }
+
+  function resetForm() {
+    document.getElementById('liftSlider').value = 2;
+    document.getElementById('tyreSelect').value = "31";
+    document.getElementById('offsetSlider').value = 38;
+    document.getElementById('widthSelect').value = "7";
+    updateSpecs();
+  }
+
+  // Initial call on page load
+  window.onload = function() {
+    updateSpecs();
+  };
+</script>
+
+</body>
+</html>

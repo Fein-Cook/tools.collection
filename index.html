@@ -1,1128 +1,356 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>The Workshop</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Triton ML Stance Sheet — Real Photo Wheel &amp; Offset Preview</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{
---bg:#f5f2ec;--surface:#faf9f6;--card:#fff;
---border:rgba(0,0,0,0.07);--border-strong:rgba(0,0,0,0.14);
---text:#1a1814;--text-muted:#7a7568;--text-faint:#b0aa9e;
---accent:#2a6a3a;--accent-light:#e8f5ee;
---star:#d4a017;--gold:#c9a227;
---green:#2a7a4a;--green-light:#e8f5ee;
---blue:#2a5a8c;--blue-light:#e8f0f8;
---red-light:#fdf0ed;
---radius:12px;--radius-sm:8px;
---hdr:56px;
---shadow:0 4px 20px rgba(0,0,0,0.08);
-}
-[data-theme="dark"]{
---bg:#111510;--surface:#181d14;--card:#1f261b;
---border:rgba(255,255,255,0.07);--border-strong:rgba(255,255,255,0.13);
---text:#f0ece4;--text-muted:#9a9080;--text-faint:#5a5448;
---accent:#4a9a5a;--accent-light:#0d2018;
---green-light:#0d2018;--blue-light:#0d1a28;--red-light:#2a1210;
---shadow:0 4px 20px rgba(0,0,0,0.35);
-}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .2s,color .2s}
-
-/* HEADER */
-header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.25rem;position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;height:var(--hdr);gap:8px}
-.logo{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;letter-spacing:-.02em;display:flex;align-items:center;gap:9px;flex-shrink:0}
-.logo-icon{width:28px;height:28px;background:var(--accent);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.logo-icon svg{width:20px;height:20px}
-nav{display:flex;gap:2px}
-.nav-btn{background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.8rem;font-weight:500;color:var(--text-muted);padding:5px 10px;border-radius:6px;transition:all .15s;white-space:nowrap}
-.nav-btn:hover,.nav-btn.active{background:var(--bg);color:var(--text)}
-.hdr-right{display:flex;align-items:center;gap:6px}
-.icon-btn{background:none;border:1px solid var(--border-strong);cursor:pointer;width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .15s;color:var(--text-muted);position:relative}
-.icon-btn:hover{background:var(--bg)}
-.add-btn{background:var(--accent);color:#fff;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:500;padding:6px 14px;border-radius:6px;white-space:nowrap;transition:opacity .15s}
-.add-btn:hover{opacity:.88}
-
-/* SETTINGS DROPDOWN */
-.settings-wrap{position:relative}
-.settings-dropdown{position:absolute;top:calc(100% + 6px);right:0;background:var(--card);border:1px solid var(--border-strong);border-radius:var(--radius-sm);width:280px;box-shadow:var(--shadow);z-index:300;padding:12px;display:none}
-.settings-dropdown.open{display:block}
-.settings-section{margin-bottom:12px}
-.settings-section:last-child{margin-bottom:0}
-.settings-label{font-size:0.68rem;font-weight:500;color:var(--text-faint);text-transform:uppercase;letter-spacing:.06em;margin-bottom:7px}
-.settings-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
-.settings-row:last-child{margin-bottom:0}
-.settings-row label{font-size:0.82rem;color:var(--text-muted);cursor:pointer}
-.toggle-switch{position:relative;width:34px;height:20px;flex-shrink:0}
-.toggle-switch input{opacity:0;width:0;height:0}
-.toggle-track{position:absolute;inset:0;background:var(--border-strong);border-radius:10px;cursor:pointer;transition:background .2s}
-.toggle-switch input:checked+.toggle-track{background:var(--accent)}
-.toggle-track:before{content:'';position:absolute;width:14px;height:14px;border-radius:50%;background:#fff;top:3px;left:3px;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,0.2)}
-.toggle-switch input:checked+.toggle-track:before{transform:translateX(14px)}
-.settings-divider{height:1px;background:var(--border);margin:10px 0}
-.sync-input-sm{width:100%;font-family:'DM Mono',monospace;font-size:0.75rem;padding:6px 9px;background:var(--bg);border:1px solid var(--border-strong);border-radius:6px;color:var(--text);outline:none;margin-bottom:6px;transition:border-color .15s}
-.sync-input-sm:focus{border-color:var(--accent)}
-.sync-btn-row{display:flex;gap:6px}
-.sync-btn-sm{flex:1;font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:500;padding:6px 10px;border-radius:6px;cursor:pointer;border:none;transition:opacity .15s}
-.sync-btn-push{background:var(--accent);color:#fff}
-.sync-btn-pull{background:var(--text);color:var(--bg)}
-.sync-btn-sm:hover{opacity:.82}
-.sync-status-sm{font-size:0.7rem;color:var(--text-faint);margin-top:5px;min-height:14px}
-
-/* HERO */
-.hero{padding:1.75rem 1.25rem 1rem;max-width:1200px;margin:0 auto;display:flex;align-items:flex-end;justify-content:space-between;gap:1.25rem;flex-wrap:wrap}
-.hero-title{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;line-height:1.1;letter-spacing:-.03em}
-.stats-row{display:flex;gap:1.1rem;align-items:flex-end}
-.stat{text-align:right}
-.stat-num{font-family:'DM Mono',monospace;font-size:1.5rem;font-weight:500;line-height:1}
-.stat-label{font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
-.stat-divider{width:1px;height:32px;background:var(--border-strong);opacity:.5}
-
-/* FILTER BAR */
-.filter-bar{max-width:1200px;margin:0 auto;padding:0 1.25rem 1.1rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.dd-wrap{position:relative}
-.dd-btn{background:var(--card);border:1px solid var(--border-strong);font-family:'DM Sans',sans-serif;font-size:0.78rem;color:var(--text-muted);padding:5px 28px 5px 10px;border-radius:6px;cursor:pointer;transition:all .15s;white-space:nowrap;position:relative;outline:none}
-.dd-btn::after{content:'▾';position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:10px;color:var(--text-faint)}
-.dd-btn:hover,.dd-btn.active-filter{border-color:var(--accent);color:var(--accent)}
-.dd-menu{position:absolute;top:calc(100% + 4px);left:0;background:var(--card);border:1px solid var(--border-strong);border-radius:var(--radius-sm);min-width:160px;box-shadow:var(--shadow);z-index:200;display:none;padding:4px}
-.dd-menu.open{display:block}
-.dd-item{font-family:'DM Sans',sans-serif;font-size:0.82rem;color:var(--text-muted);padding:6px 10px;border-radius:4px;cursor:pointer;transition:background .1s;display:flex;align-items:center;justify-content:space-between;gap:8px}
-.dd-item:hover{background:var(--bg);color:var(--text)}
-.dd-item.selected{color:var(--accent);font-weight:500}
-.dd-item.selected::after{content:'✓';font-size:11px}
-.search-wrap{margin-left:auto;position:relative}
-.search-input{font-family:'DM Sans',sans-serif;font-size:0.82rem;background:var(--card);border:1px solid var(--border-strong);border-radius:20px;padding:6px 14px 6px 30px;color:var(--text);width:160px;outline:none;transition:border-color .15s,width .2s}
-.search-input:focus{border-color:var(--accent);width:200px}
-.search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-faint);font-size:13px;pointer-events:none}
-.view-toggle{display:flex;gap:2px;background:var(--bg);border:1px solid var(--border-strong);border-radius:6px;padding:2px}
-.view-btn{background:none;border:none;cursor:pointer;padding:4px 7px;border-radius:4px;font-size:13px;color:var(--text-muted);transition:all .15s}
-.view-btn.active{background:var(--card);color:var(--text)}
-
-/* SECTION TABS */
-.section-tabs{max-width:1200px;margin:0 auto;padding:0 1.25rem .75rem;display:flex;gap:4px}
-.section-tab{background:none;border:none;font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:500;color:var(--text-muted);padding:6px 14px;border-radius:20px;cursor:pointer;transition:all .15s;border:1px solid transparent}
-.section-tab:hover{color:var(--text)}
-.section-tab.active{background:var(--card);border-color:var(--border-strong);color:var(--text)}
-.section-tab .tab-count{font-family:'DM Mono',monospace;font-size:0.7rem;background:var(--bg);border-radius:10px;padding:1px 6px;margin-left:5px;color:var(--text-faint)}
-.section-tab.active .tab-count{background:var(--accent-light);color:var(--accent)}
-
-/* GRID */
-.grid-wrap{max-width:1200px;margin:0 auto;padding:0 1.25rem 4rem}
-#collection-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:13px}
-#collection-grid.list-view{grid-template-columns:1fr}
-.pack-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:transform .18s,box-shadow .18s,border-color .18s;position:relative}
-.pack-card:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:var(--border-strong)}
-.pack-img-wrap{width:100%;aspect-ratio:3/4;background:var(--bg);overflow:hidden;position:relative}
-.pack-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
-.pack-card:hover .pack-img-wrap img{transform:scale(1.04)}
-.pack-no-img{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--text-faint)}
-.pack-no-img-icon{font-size:2rem}
-.pack-no-img-label{font-size:0.7rem}
-.pack-badge{position:absolute;top:7px;right:7px;background:rgba(255,255,255,0.92);border:1px solid var(--border);border-radius:20px;font-size:0.65rem;font-weight:500;padding:2px 7px;color:var(--text-muted);backdrop-filter:blur(4px)}
-[data-theme="dark"] .pack-badge{background:rgba(0,0,0,0.6)}
-.wish-ribbon{position:absolute;top:0;left:0;background:var(--blue);color:#fff;font-size:0.58rem;font-weight:600;padding:3px 8px 3px 6px;border-radius:0 0 8px 0;letter-spacing:.04em;text-transform:uppercase}
-.pack-info{padding:9px 11px 11px;border-top:1px solid var(--border)}
-.pack-brand{font-size:0.65rem;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;font-weight:500;margin-bottom:1px}
-.pack-name{font-family:'Playfair Display',serif;font-size:0.9rem;font-weight:500;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pack-variant{font-size:0.7rem;color:var(--text-muted);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pack-meta{display:flex;align-items:center;justify-content:space-between;margin-top:7px}
-.pack-score{font-family:'DM Mono',monospace;font-size:0.75rem;font-weight:500;color:var(--text-muted);background:var(--bg);border-radius:4px;padding:1px 5px}
-.pack-score.score-exc{color:#fff;background:#b8860b}
-.pack-score.score-out{color:#fff;background:var(--green)}
-.pack-country{font-size:0.68rem;color:var(--text-faint);font-family:'DM Mono',monospace}
-.cond-dots{display:flex;gap:2px;align-items:center}
-.cdot{width:6px;height:6px;border-radius:50%;background:var(--border-strong)}
-.cdot.lit{background:var(--accent)}
-
-/* list view */
-#collection-grid.list-view .pack-card{display:grid;grid-template-columns:60px 1fr}
-#collection-grid.list-view .pack-img-wrap{aspect-ratio:1;height:60px;width:60px;border-radius:0}
-#collection-grid.list-view .pack-info{padding:8px 12px;border-top:none;border-left:1px solid var(--border);display:flex;flex-direction:column;justify-content:center}
-.empty-state{grid-column:1/-1;text-align:center;padding:4rem 2rem;color:var(--text-muted)}
-.empty-icon{font-size:2.5rem;margin-bottom:10px}
-.empty-title{font-family:'Playfair Display',serif;font-size:1.15rem;margin-bottom:5px;color:var(--text)}
-.empty-sub{font-size:0.8rem}
-
-/* WISHLIST SECTION */
-.wishlist-header{max-width:1200px;margin:0 auto;padding:0 1.25rem 0.75rem;display:flex;align-items:center;gap:12px}
-.wishlist-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:500;color:var(--text)}
-.wishlist-divider{flex:1;height:1px;background:var(--border)}
-.wishlist-count{font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--text-faint)}
-
-/* MODAL */
-.modal-overlay{position:fixed;inset:0;background:rgba(10,8,5,0.65);z-index:200;display:flex;align-items:flex-end;justify-content:center;padding:0;opacity:0;pointer-events:none;transition:opacity .2s}
-@media(min-width:600px){.modal-overlay{align-items:center;padding:1rem}}
-.modal-overlay.open{opacity:1;pointer-events:all}
-.modal{background:var(--card);width:100%;max-width:540px;max-height:92vh;overflow-y:auto;transform:translateY(24px);transition:transform .22s;border-radius:16px 16px 0 0}
-@media(min-width:600px){.modal{border-radius:16px;transform:translateY(16px);max-height:90vh}}
-.modal-overlay.open .modal{transform:translateY(0)}
-.modal-handle{width:36px;height:4px;background:var(--border-strong);border-radius:2px;margin:10px auto 0;display:block}
-@media(min-width:600px){.modal-handle{display:none}}
-.modal-header{padding:1rem 1.4rem .85rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--card);z-index:10}
-.modal-title{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700}
-.modal-close{background:none;border:none;cursor:pointer;font-size:1.2rem;color:var(--text-muted);width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:6px;transition:background .15s}
-.modal-close:hover{background:var(--bg)}
-.modal-body{padding:1rem 1.4rem 1.4rem}
-
-/* FORM */
-.form-row{margin-bottom:.85rem}
-.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:.85rem}
-@media(max-width:400px){.form-row-2{grid-template-columns:1fr}}
-label{display:block;font-size:0.7rem;font-weight:500;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
-input[type=text],input[type=number],select,textarea{width:100%;font-family:'DM Sans',sans-serif;font-size:0.88rem;background:var(--bg);color:var(--text);border:1px solid var(--border-strong);border-radius:var(--radius-sm);padding:8px 11px;outline:none;transition:border-color .15s;-webkit-appearance:none}
-input:focus,select:focus,textarea:focus{border-color:var(--accent)}
-textarea{resize:vertical;min-height:68px}
-select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23999'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
-
-/* AI BAR */
-.ai-bar{background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:.85rem}
-.ai-bar-top{display:flex;align-items:center;gap:8px;margin-bottom:7px}
-.ai-badge{background:var(--accent);color:#fff;font-size:0.58rem;font-weight:600;letter-spacing:.06em;padding:2px 5px;border-radius:3px}
-.ai-bar-label{font-size:0.72rem;color:var(--text-muted);font-weight:500;text-transform:uppercase;letter-spacing:.05em}
-.ai-row{display:flex;gap:7px}
-.ai-input{flex:1;font-size:0.85rem}
-.ai-btn{background:var(--accent);color:#fff;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.8rem;font-weight:500;padding:8px 13px;border-radius:6px;white-space:nowrap;transition:opacity .15s;display:flex;align-items:center;gap:5px;flex-shrink:0}
-.ai-btn:hover{opacity:.88}
-.ai-btn:disabled{opacity:.4;cursor:not-allowed}
-.ai-status{font-size:0.72rem;color:var(--text-faint);margin-top:6px;min-height:14px}
-.spin{display:inline-block;animation:spin .7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* AUTOCOMPLETE */
-.autocomplete-wrap{position:relative}
-.ac-list{position:absolute;top:calc(100% + 3px);left:0;right:0;background:var(--card);border:1px solid var(--border-strong);border-radius:var(--radius-sm);z-index:300;max-height:180px;overflow-y:auto;box-shadow:0 8px 24px rgba(0,0,0,0.12);display:none}
-.ac-list.open{display:block}
-.ac-item{padding:7px 11px;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);transition:background .1s}
-.ac-item:last-child{border-bottom:none}
-.ac-item:hover,.ac-item.focused{background:var(--accent-light)}
-.ac-item-name{font-weight:500}
-.ac-item-origin{font-size:0.68rem;color:var(--text-faint);font-family:'DM Mono',monospace}
-
-/* SCORE SECTION */
-.score-section{background:var(--bg);border-radius:var(--radius-sm);padding:12px;margin-bottom:.85rem;border:1px solid var(--border)}
-.score-section-title{font-size:0.7rem;font-weight:500;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
-.score-total{font-family:'DM Mono',monospace;font-size:1.1rem;font-weight:500}
-.score-total-label{font-size:0.68rem;color:var(--text-faint)}
-.score-category{display:grid;grid-template-columns:1fr auto;align-items:center;gap:10px;margin-bottom:8px}
-.score-category:last-child{margin-bottom:0}
-.score-cat-name{font-size:0.76rem;color:var(--text-muted)}
-.score-cat-name span{font-size:0.63rem;color:var(--text-faint);display:block;margin-top:1px}
-.score-slider-wrap{display:flex;align-items:center;gap:7px}
-.score-slider{width:100px;-webkit-appearance:none;height:4px;border-radius:2px;background:var(--border-strong);outline:none;cursor:pointer}
-.score-slider::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid var(--card);box-shadow:0 1px 4px rgba(0,0,0,.2)}
-.score-slider::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid var(--card)}
-.score-val{font-family:'DM Mono',monospace;font-size:0.78rem;font-weight:500;min-width:26px;text-align:right}
-
-/* CONDITION PICKER */
-.condition-picker{display:flex;gap:6px;margin-top:4px}
-.condition-dot-btn{width:22px;height:22px;border-radius:50%;border:2px solid var(--border-strong);background:none;cursor:pointer;transition:all .15s}
-.condition-dot-btn.lit{background:var(--accent);border-color:var(--accent)}
-
-/* WISHLIST TOGGLE IN FORM */
-.wishlist-toggle-row{display:flex;align-items:center;justify-content:space-between;background:var(--bg);border:1px solid var(--border-strong);border-radius:var(--radius-sm);padding:9px 12px;margin-bottom:.85rem;cursor:pointer}
-.wishlist-toggle-label{font-size:0.82rem;color:var(--text-muted)}
-.wishlist-toggle-label strong{color:var(--blue);font-weight:500}
-
-/* PHOTO */
-.img-upload{border:2px dashed var(--border-strong);border-radius:var(--radius-sm);padding:1.1rem;text-align:center;cursor:pointer;transition:border-color .15s,background .15s;position:relative}
-.img-upload:hover{border-color:var(--accent);background:var(--accent-light)}
-.img-upload input{position:absolute;inset:0;opacity:0;cursor:pointer}
-.img-upload-icon{font-size:1.5rem;margin-bottom:5px}
-.img-upload-label{font-size:0.76rem;color:var(--text-muted)}
-.img-preview{width:100%;max-height:200px;object-fit:contain;border-radius:var(--radius-sm);margin-top:8px;display:none}
-.img-preview.show{display:block}
-.form-actions{display:flex;gap:8px;justify-content:flex-end;padding-top:.85rem;border-top:1px solid var(--border);margin-top:.85rem}
-.btn-cancel{background:none;border:1px solid var(--border-strong);font-family:'DM Sans',sans-serif;font-size:0.8rem;color:var(--text-muted);padding:8px 16px;border-radius:var(--radius-sm);cursor:pointer;transition:all .15s}
-.btn-cancel:hover{border-color:var(--text-muted);color:var(--text)}
-.btn-save{background:var(--accent);border:none;font-family:'DM Sans',sans-serif;font-size:0.8rem;font-weight:500;color:#fff;padding:8px 18px;border-radius:var(--radius-sm);cursor:pointer;transition:opacity .15s}
-.btn-save:hover{opacity:.88}
-
-/* DETAIL */
-.detail-img{width:100%;max-height:260px;object-fit:contain;background:var(--bg);border-radius:var(--radius-sm)}
-.detail-img-placeholder{width:100%;height:160px;background:var(--bg);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:2.5rem;color:var(--text-faint)}
-.detail-brand{font-size:0.7rem;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;font-weight:500;margin-top:12px;margin-bottom:1px}
-.detail-name{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;line-height:1.15;margin-bottom:3px}
-.detail-variant{color:var(--text-muted);font-size:0.88rem}
-.detail-wish-badge{display:inline-block;font-size:0.72rem;padding:3px 10px;border-radius:20px;margin-top:6px;font-weight:500;background:var(--blue-light);color:var(--blue);border:1px solid var(--blue)}
-.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:12px}
-.detail-field{background:var(--bg);border-radius:var(--radius-sm);padding:7px 10px}
-.detail-field-label{font-size:0.63rem;color:var(--text-faint);text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px}
-.detail-field-val{font-size:0.85rem;font-weight:500}
-.detail-notes{margin-top:10px;padding:9px 11px;background:var(--bg);border-radius:var(--radius-sm);font-size:0.82rem;color:var(--text-muted);line-height:1.5}
-.score-breakdown{margin-top:10px;background:var(--bg);border-radius:var(--radius-sm);padding:10px 12px}
-.score-breakdown-title{font-size:0.63rem;color:var(--text-faint);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px}
-.score-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:5px}
-.score-bar-row:last-child{margin-bottom:0}
-.score-bar-label{font-size:0.72rem;color:var(--text-muted);width:96px;flex-shrink:0}
-.score-bar-track{flex:1;height:5px;background:var(--border-strong);border-radius:3px;overflow:hidden}
-.score-bar-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .4s}
-.score-bar-val{font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--text-muted);width:24px;text-align:right;flex-shrink:0}
-.big-score{display:flex;align-items:baseline;gap:4px;margin-top:8px}
-.big-score-num{font-family:'DM Mono',monospace;font-size:2rem;font-weight:500;line-height:1}
-.big-score-denom{font-size:0.9rem;color:var(--text-faint)}
-.detail-actions{display:flex;gap:7px;margin-top:12px}
-.btn-edit{flex:1;background:var(--text);border:none;font-family:'DM Sans',sans-serif;font-size:0.8rem;font-weight:500;color:#fff;padding:9px;border-radius:var(--radius-sm);cursor:pointer;transition:opacity .15s}
-[data-theme="dark"] .btn-edit{background:var(--border-strong)}
-.btn-edit:hover{opacity:.82}
-.btn-delete{background:none;border:1px solid rgba(42,106,58,.3);font-family:'DM Sans',sans-serif;font-size:0.8rem;color:var(--accent);padding:9px 14px;border-radius:var(--radius-sm);cursor:pointer;transition:all .15s}
-.btn-delete:hover{background:var(--accent-light)}
-
-/* RANKINGS */
-#rankings-panel{display:none}
-#rankings-panel.active{display:block}
-#collection-panel.hidden{display:none}
-.rankings-wrap{max-width:700px;margin:0 auto;padding:0 1.25rem 4rem}
-.ranking-item{display:flex;align-items:center;gap:13px;padding:11px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:opacity .15s}
-.ranking-item:hover{opacity:.75}
-.rank-num{font-family:'DM Mono',monospace;font-size:.9rem;font-weight:500;color:var(--text-faint);width:24px;flex-shrink:0;text-align:right}
-.rank-num.gold{color:var(--gold)}
-.rank-img{width:42px;height:56px;border-radius:5px;object-fit:cover;background:var(--bg);flex-shrink:0}
-.rank-img-placeholder{width:42px;height:56px;border-radius:5px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;color:var(--text-faint)}
-.rank-info{flex:1;min-width:0}
-.rank-brand{font-size:0.63rem;color:var(--accent);text-transform:uppercase;letter-spacing:.07em;font-weight:500}
-.rank-name{font-family:'Playfair Display',serif;font-size:.92rem;font-weight:500}
-.rank-variant{font-size:0.74rem;color:var(--text-muted)}
-.rank-meta{display:flex;align-items:center;gap:7px;margin-top:2px}
-.rank-score-big{font-family:'DM Mono',monospace;font-size:.88rem;font-weight:500;flex-shrink:0;background:var(--bg);border-radius:6px;padding:3px 8px;color:var(--text)}
-.empty-rankings{text-align:center;padding:4rem 0;color:var(--text-muted)}
-
-/* TOAST */
-.toast{position:fixed;bottom:calc(env(safe-area-inset-bottom)+1.25rem);left:50%;transform:translateX(-50%) translateY(20px);background:var(--text);color:var(--bg);font-size:0.78rem;padding:7px 14px;border-radius:20px;opacity:0;transition:all .25s;pointer-events:none;z-index:500;white-space:nowrap;max-width:90vw}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-
-@media(max-width:500px){
-.hero-title{font-size:1.55rem}
-.stats-row{gap:.8rem}
-.stat-num{font-size:1.25rem}
-#collection-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
-.search-input{width:130px}
-.search-input:focus{width:160px}
-}
+  :root{
+    --bg:#14171A;
+    --panel:#1E2327;
+    --panel-light:#262C31;
+    --line:#343B41;
+    --orange:#E8611C;
+    --yellow:#F2C14E;
+    --paper:#EDE9DE;
+    --blue:#5B8AA6;
+    --muted:#7C858C;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--paper);
+    font-family:'IBM Plex Sans',sans-serif;
+    min-height:100vh;
+    padding:24px;
+  }
+  .sheet{
+    max-width:1180px;
+    margin:0 auto;
+    border:1px solid var(--line);
+    background:var(--panel);
+  }
+  .titleblock{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    padding:18px 24px;
+    border-bottom:2px solid var(--orange);
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .titleblock h1{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:34px;
+    letter-spacing:1.5px;
+    margin:0;
+    color:var(--paper);
+  }
+  .titleblock h1 span{color:var(--orange);}
+  .titleblock .docnum{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    color:var(--muted);
+    text-align:right;
+    line-height:1.5;
+  }
+  .tabs{ display:flex; border-bottom:1px solid var(--line); }
+  .tab{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px; letter-spacing:1px; text-transform:uppercase;
+    color:var(--muted); background:none; border:none;
+    padding:12px 22px; cursor:pointer;
+    border-right:1px solid var(--line); border-bottom:2px solid transparent;
+  }
+  .tab.active{ color:var(--yellow); border-bottom:2px solid var(--orange); }
+  .body-layout{ display:flex; flex-wrap:wrap; }
+  .drawing-panel{
+    flex:1 1 640px; padding:20px; border-right:1px solid var(--line); position:relative;
+  }
+  .stage{ 
+    position:relative; 
+    width:100%; 
+    background:#0d0f11; 
+    overflow:hidden; 
+    border:1px solid var(--line);
+  }
+  .stage img{ width:100%; display:block; height:auto; }
+  .stage svg{ position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; }
+  
+  .view{ display:none; }
+  .view.active{ display:block; }
+  
+  .hint{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted);
+    margin-top:10px; line-height:1.6;
+  }
+  .hint b{color:var(--yellow);}
+  
+  .controls-panel{
+    flex:0 0 320px; padding:20px; display:flex; flex-direction:column; gap:16px;
+  }
+  .field{ display:flex; flex-direction:column; gap:6px; }
+  .field label{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; text-transform:uppercase;
+    letter-spacing:1.5px; color:var(--blue); display:flex; justify-content:space-between;
+  }
+  .field label .val{color:var(--yellow);}
+  select{
+    background:var(--panel-light); border:1px solid var(--line); color:var(--paper);
+    font-family:'IBM Plex Sans',sans-serif; font-size:14px; padding:9px 10px;
+    border-radius:2px; outline:none; cursor:pointer;
+  }
+  input[type=range]{ width:100%; accent-color:var(--orange); cursor:pointer; }
+  select:focus{ border-color:var(--orange); }
+  .divider{ height:1px; background:var(--line); margin:2px 0; }
+  .resetbtn{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; text-transform:uppercase;
+    letter-spacing:1px; color:var(--paper); background:var(--panel-light);
+    border:1px solid var(--line); padding:9px 10px; cursor:pointer; border-radius:2px;
+  }
+  .resetbtn:hover{ border-color:var(--orange); color:var(--orange); }
+  .specbar{
+    display:flex; flex-wrap:wrap; border-top:1px solid var(--line);
+    font-family:'IBM Plex Mono',monospace;
+  }
+  .spec{ flex:1 1 140px; padding:14px 18px; border-right:1px solid var(--line); }
+  .spec:last-child{ border-right:none; }
+  .spec .k{ font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; }
+  .spec .v{ font-size:17px; color:var(--yellow); margin-top:4px; }
+  .footer-note{
+    padding:12px 24px; font-size:11px; color:var(--muted);
+    font-family:'IBM Plex Mono',monospace; border-top:1px solid var(--line);
+  }
+  @media(max-width:860px){
+    .controls-panel{ flex:1 1 100%; border-top:1px solid var(--line); }
+    .drawing-panel{ border-right:none; }
+  }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="logo">
-    <div class="logo-icon">
-      <!-- wrench / tool SVG -->
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M14.5 2.5C12.5 2.5 10.5 3.5 9.5 5.2L3.5 11.2L5.5 13.2L8 10.7V13L14 19L17 16L11 10H13.3L15.8 7.5C16.8 8.2 17.5 9.3 17.5 10.5C17.5 12.5 15.9 14 14 14C13.4 14 12.8 13.8 12.3 13.5L10.5 15.3C11.4 15.8 12.7 16 14 16C17 16 19.5 13.5 19.5 10.5C19.5 7 17.2 4.2 14.5 2.5Z" fill="white"/>
-        <rect x="2" y="18" width="8" height="3" rx="1.5" transform="rotate(-45 2 18)" fill="white" opacity="0.7"/>
-      </svg>
-    </div>
-    The Workshop
+<div class="sheet">
+  <div class="titleblock">
+    <h1>TRITON ML <span>STANCE SHEET</span></h1>
+    <div class="docnum">REAL PHOTO OVERLAY — WHEEL / TYRE / OFFSET PREVIEW</div>
   </div>
 
-  <nav>
-    <button class="nav-btn active" id="tab-collection" onclick="switchTab('collection')">Collection</button>
-    <button class="nav-btn" id="tab-rankings" onclick="switchTab('rankings')">Rankings</button>
-  </nav>
+  <div class="tabs">
+    <button class="tab active" data-view="side">Side profile</button>
+    <button class="tab" data-view="front">Front — offset</button>
+  </div>
 
-  <div class="hdr-right">
-    <button class="icon-btn" onclick="toggleTheme()" id="theme-btn" title="Dark mode">🌙</button>
-    <div class="settings-wrap">
-      <button class="icon-btn" onclick="toggleSettings(event)" id="settings-btn" title="Settings">⚙</button>
-      <div class="settings-dropdown" id="settings-dropdown">
-        <div class="settings-section">
-          <div class="settings-label">Appearance</div>
-          <div class="settings-row">
-            <label for="tog-dark">Dark mode</label>
-            <label class="toggle-switch">
-              <input type="checkbox" id="tog-dark" onchange="toggleThemeCheck(this)">
-              <span class="toggle-track"></span>
-            </label>
-          </div>
+  <div class="body-layout">
+    <div class="drawing-panel">
+
+      <div id="sideView" class="view active">
+        <div class="stage">
+          <img id="sideImg" src="image-removebg-preview (1).png" alt="Triton ML Side Cutout">
+          <svg viewBox="0 0 1000 667" preserveAspectRatio="xMidYMid meet">
+            <g id="sideOverlay">
+              <circle id="frontWheel" cx="815" cy="390" r="105" fill="rgba(242,193,78,0.15)" stroke="#F2C14E" stroke-width="4" stroke-dasharray="8,6"/>
+              <circle cx="815" cy="390" r="6" fill="#E8611C"/>
+              
+              <circle id="rearWheel" cx="218" cy="390" r="105" fill="rgba(242,193,78,0.15)" stroke="#F2C14E" stroke-width="4" stroke-dasharray="8,6"/>
+              <circle cx="218" cy="390" r="6" fill="#E8611C"/>
+            </g>
+          </svg>
         </div>
-        <div class="settings-divider"></div>
-        <div class="settings-section">
-          <div class="settings-label">GitHub Sync</div>
-          <input class="sync-input-sm" type="password" id="gh-token" placeholder="GitHub token (ghp_…)" autocomplete="off">
-          <input class="sync-input-sm" type="text" id="gh-repo" placeholder="username/repo-name">
-          <div class="sync-btn-row">
-            <button class="sync-btn-sm sync-btn-push" onclick="ghPush()">↑ Push</button>
-            <button class="sync-btn-sm sync-btn-pull" onclick="ghPull()">↓ Pull</button>
-          </div>
-          <div class="sync-status-sm" id="sync-status"></div>
-          <div style="font-size:0.65rem;color:var(--text-faint);margin-top:5px;line-height:1.4">Needs a repo with a <em>collection.json</em> file (can be empty). Token needs repo write scope.</div>
+        <div class="hint"><b>SIDE VIEW:</b> Adjust suspension lift and tyre size to calculate clearance and arch gap.</div>
+      </div>
+
+      <div id="frontView" class="view">
+        <div class="stage">
+          <img id="frontImg" src="image-removebg-preview.jpg" alt="Triton ML Front View">
+          <svg viewBox="0 0 622 390" preserveAspectRatio="xMidYMid meet">
+            <g id="frontOverlay">
+              <line id="leftOffset" x1="125" y1="260" x2="125" y2="380" stroke="#E8611C" stroke-width="8" stroke-linecap="round"/>
+              <line id="rightOffset" x1="495" y1="260" x2="495" y2="380" stroke="#E8611C" stroke-width="8" stroke-linecap="round"/>
+            </g>
+          </svg>
         </div>
-        <div class="settings-divider"></div>
-        <div class="settings-section">
-          <div class="settings-label">AI Auto-fill</div>
-          <input class="sync-input-sm" type="password" id="api-key-store" placeholder="Anthropic API key (sk-ant-…)" autocomplete="off">
-          <button class="sync-btn-sm sync-btn-push" style="width:100%" onclick="saveApiKey()">Save Key</button>
-          <div style="font-size:0.65rem;color:var(--text-faint);margin-top:5px;line-height:1.4">Stored locally. Get a key at console.anthropic.com</div>
-        </div>
+        <div class="hint"><b>FRONT VIEW:</b> Adjust wheel offset (ET) and rim width to preview track poke and scrub lines.</div>
       </div>
-    </div>
-    <button class="add-btn" onclick="openAddModal()">+ Add Tool</button>
-  </div>
-</header>
 
-<!-- COLLECTION PANEL -->
-<div id="collection-panel">
-  <div class="hero">
-    <div>
-      <div class="hero-title">The Workshop</div>
     </div>
-    <div class="stats-row">
-      <div class="stat"><div class="stat-num" id="stat-total">0</div><div class="stat-label">Tools</div></div>
-      <div class="stat-divider"></div>
-      <div class="stat"><div class="stat-num" id="stat-brands">0</div><div class="stat-label">Brands</div></div>
-      <div class="stat-divider"></div>
-      <div class="stat"><div class="stat-num" id="stat-avg">—</div><div class="stat-label">Avg /100</div></div>
-    </div>
-  </div>
 
-  <!-- SECTION TABS -->
-  <div class="section-tabs">
-    <button class="section-tab active" id="sec-collection" onclick="setSection('collection')">
-      Collection <span class="tab-count" id="count-collection">0</span>
-    </button>
-    <button class="section-tab" id="sec-wishlist" onclick="setSection('wishlist')">
-      Wishlist <span class="tab-count" id="count-wishlist">0</span>
-    </button>
-  </div>
-
-  <!-- FILTER BAR -->
-  <div class="filter-bar">
-    <div class="dd-wrap" id="sort-wrap">
-      <button class="dd-btn" id="sort-btn" onclick="toggleDD('sort-dd')">Sort: Newest</button>
-      <div class="dd-menu" id="sort-dd">
-        <div class="dd-item selected" onclick="setSort(this,'newest')">Newest</div>
-        <div class="dd-item" onclick="setSort(this,'score')">Top Scored</div>
-        <div class="dd-item" onclick="setSort(this,'name')">A – Z</div>
-        <div class="dd-item" onclick="setSort(this,'brand')">By Brand</div>
+    <div class="controls-panel">
+      <div class="field">
+        <label>Lift Kit <span class="val" id="liftVal">2" (50mm)</span></label>
+        <input type="range" id="liftSlider" min="0" max="4" step="0.5" value="2">
       </div>
-    </div>
 
-    <div class="dd-wrap" id="fmt-wrap">
-      <button class="dd-btn" id="fmt-btn" onclick="toggleDD('fmt-dd')">Category: All</button>
-      <div class="dd-menu" id="fmt-dd">
-        <div class="dd-item selected" onclick="setFmt(this,'')">All Categories</div>
-        <div class="dd-item" onclick="setFmt(this,'Hand Tools')">Hand Tools</div>
-        <div class="dd-item" onclick="setFmt(this,'Power Tools')">Power Tools</div>
-        <div class="dd-item" onclick="setFmt(this,'Measuring')">Measuring</div>
-        <div class="dd-item" onclick="setFmt(this,'Cutting')">Cutting</div>
-        <div class="dd-item" onclick="setFmt(this,'Fastening')">Fastening</div>
-        <div class="dd-item" onclick="setFmt(this,'Clamping')">Clamping</div>
-        <div class="dd-item" onclick="setFmt(this,'Finishing')">Finishing</div>
-        <div class="dd-item" onclick="setFmt(this,'Garden')">Garden</div>
-        <div class="dd-item" onclick="setFmt(this,'Electrical')">Electrical</div>
-        <div class="dd-item" onclick="setFmt(this,'Automotive')">Automotive</div>
-        <div class="dd-item" onclick="setFmt(this,'Other')">Other</div>
+      <div class="field">
+        <label>Tyre Diameter <span class="val" id="tyreVal">31" (265/70R16)</span></label>
+        <select id="tyreSelect">
+          <option value="30">30" (Stock / 245/70R16)</option>
+          <option value="31" selected>31" (265/70R16)</option>
+          <option value="32">32" (265/75R16)</option>
+          <option value="33">33" (285/75R16)</option>
+        </select>
       </div>
-    </div>
 
-    <div class="search-wrap">
-      <span class="search-icon">⌕</span>
-      <input class="search-input" type="text" placeholder="Search…" id="search-input" oninput="renderGrid()">
-    </div>
+      <div class="divider"></div>
 
-    <div class="view-toggle">
-      <button class="view-btn active" id="vbtn-grid" onclick="setView('grid')">⊞</button>
-      <button class="view-btn" id="vbtn-list" onclick="setView('list')">☰</button>
+      <div class="field">
+        <label>Wheel Offset (ET) <span class="val" id="offsetVal">ET+38 (Stock)</span></label>
+        <input type="range" id="offsetSlider" min="-20" max="45" step="5" value="38">
+      </div>
+
+      <div class="field">
+        <label>Rim Width <span class="val" id="widthVal">7.0"</span></label>
+        <select id="widthSelect">
+          <option value="7" selected>7.0" (Stock Spec)</option>
+          <option value="8">8.0" (Aftermarket)</option>
+          <option value="9">9.0" (Wide Stance)</option>
+        </select>
+      </div>
+
+      <button class="resetbtn" id="resetBtn">Reset All Specs</button>
     </div>
   </div>
 
-  <div class="grid-wrap"><div id="collection-grid"></div></div>
-</div>
-
-<!-- RANKINGS PANEL -->
-<div id="rankings-panel">
-  <div class="hero">
-    <div><div class="hero-title">Rankings</div></div>
+  <div class="specbar">
+    <div class="spec">
+      <div class="k">Est. Clearance Gain</div>
+      <div class="v" id="clearanceOut">+63 mm</div>
+    </div>
+    <div class="spec">
+      <div class="k">Track Shift / Side</div>
+      <div class="v" id="trackOut">0 mm</div>
+    </div>
+    <div class="spec">
+      <div class="k">Arch Scrub Risk</div>
+      <div class="v" id="scrubOut" style="color: #5B8AA6;">LOW</div>
+    </div>
   </div>
-  <div class="rankings-wrap"><div id="rankings-list"></div></div>
-</div>
 
-<!-- ADD/EDIT MODAL -->
-<div class="modal-overlay" id="form-overlay" onclick="overlayClick(event,'form-overlay')">
-  <div class="modal">
-    <span class="modal-handle"></span>
-    <div class="modal-header">
-      <div class="modal-title" id="form-modal-title">Add New Tool</div>
-      <button class="modal-close" onclick="closeFormModal()">✕</button>
-    </div>
-    <div class="modal-body">
-      <input type="hidden" id="edit-id">
-
-      <!-- AI AUTOFILL -->
-      <div class="ai-bar">
-        <div class="ai-bar-top">
-          <span class="ai-bar-label">Smart Lookup</span>
-          <span class="ai-badge">AI</span>
-        </div>
-        <div class="ai-row">
-          <input class="ai-input" type="text" id="ai-query" placeholder="e.g. Stanley No.4 bench plane…" onkeydown="if(event.key==='Enter')aiLookup()">
-          <button class="ai-btn" id="ai-btn" onclick="aiLookup()">Auto-fill</button>
-        </div>
-        <div class="ai-status"><span id="ai-status-text">Type brand + tool name, hit Auto-fill</span></div>
-      </div>
-
-      <!-- PHOTO -->
-      <div class="form-row">
-        <label>Tool Photo</label>
-        <div class="img-upload">
-          <input type="file" accept="image/*" id="img-file-input" onchange="handleImgUpload(event)">
-          <div class="img-upload-icon">📷</div>
-          <div class="img-upload-label">Tap to upload</div>
-        </div>
-        <img class="img-preview" id="img-preview" src="" alt="">
-      </div>
-
-      <!-- BRAND + NAME -->
-      <div class="form-row-2">
-        <div>
-          <label>Brand *</label>
-          <div class="autocomplete-wrap">
-            <input type="text" id="f-brand" placeholder="e.g. Stanley" oninput="onBrandInput()" onkeydown="onBrandKey(event)" autocomplete="off">
-            <div class="ac-list" id="brand-ac"></div>
-          </div>
-        </div>
-        <div>
-          <label>Tool Name *</label>
-          <div class="autocomplete-wrap">
-            <input type="text" id="f-name" placeholder="e.g. No.4 Bench Plane" oninput="onNameInput()" onkeydown="onNameKey(event)" onfocus="onNameFocus()" autocomplete="off">
-            <div class="ac-list" id="name-ac"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="form-row-2">
-        <div><label>Model / Variant</label><input type="text" id="f-variant" placeholder="e.g. Sweetheart, Mk2"></div>
-        <div><label>Country of Origin</label><input type="text" id="f-country" placeholder="e.g. USA, Germany"></div>
-      </div>
-
-      <div class="form-row-2">
-        <div>
-          <label>Category</label>
-          <select id="f-format">
-            <option value="">— Select —</option>
-            <option>Hand Tools</option>
-            <option>Power Tools</option>
-            <option>Measuring</option>
-            <option>Cutting</option>
-            <option>Fastening</option>
-            <option>Clamping</option>
-            <option>Finishing</option>
-            <option>Garden</option>
-            <option>Electrical</option>
-            <option>Automotive</option>
-            <option>Other</option>
-          </select>
-        </div>
-        <div><label>Acquired / Source</label><input type="text" id="f-acquired" placeholder="e.g. eBay 2024, inherited"></div>
-      </div>
-
-      <div class="form-row-2">
-        <div><label>Year Made</label><input type="text" id="f-tar" placeholder="e.g. 1962, 1970s"></div>
-        <div><label>Price Paid</label><input type="text" id="f-nic" placeholder="e.g. $45, free"></div>
-      </div>
-
-      <!-- WISHLIST TOGGLE -->
-      <div class="wishlist-toggle-row" onclick="toggleWishlist()" id="wishlist-toggle-row">
-        <span class="wishlist-toggle-label" id="wishlist-toggle-label">Add to <strong>Collection</strong></span>
-        <span id="wishlist-toggle-icon" style="font-size:1.1rem">🔧</span>
-      </div>
-
-      <!-- CONDITION -->
-      <div class="form-row">
-        <label>Condition</label>
-        <div class="condition-picker" id="condition-picker">
-          <button class="condition-dot-btn" data-v="1" onclick="setCondition(1)" title="Poor"></button>
-          <button class="condition-dot-btn" data-v="2" onclick="setCondition(2)" title="Fair"></button>
-          <button class="condition-dot-btn" data-v="3" onclick="setCondition(3)" title="Good"></button>
-          <button class="condition-dot-btn" data-v="4" onclick="setCondition(4)" title="Very Good"></button>
-          <button class="condition-dot-btn" data-v="5" onclick="setCondition(5)" title="Excellent / Mint"></button>
-        </div>
-      </div>
-
-      <!-- SCORE -->
-      <div class="score-section">
-        <div class="score-section-title">
-          <span>Rating (5 × 20 pts)</span>
-          <span><span class="score-total" id="form-score-total">0</span><span class="score-total-label">/100</span></span>
-        </div>
-        <div class="score-category">
-          <div class="score-cat-name">Build Quality<span>Materials, fit & finish</span></div>
-          <div class="score-slider-wrap"><input class="score-slider" type="range" min="0" max="20" value="0" id="s-collect" oninput="updateScoreTotal()"><span class="score-val" id="sv-collect">0</span></div>
-        </div>
-        <div class="score-category">
-          <div class="score-cat-name">Functionality<span>Does the job well</span></div>
-          <div class="score-slider-wrap"><input class="score-slider" type="range" min="0" max="20" value="0" id="s-ash" oninput="updateScoreTotal()"><span class="score-val" id="sv-ash">0</span></div>
-        </div>
-        <div class="score-category">
-          <div class="score-cat-name">Ergonomics<span>Comfort, balance, feel</span></div>
-          <div class="score-slider-wrap"><input class="score-slider" type="range" min="0" max="20" value="0" id="s-design" oninput="updateScoreTotal()"><span class="score-val" id="sv-design">0</span></div>
-        </div>
-        <div class="score-category">
-          <div class="score-cat-name">Value<span>Worth the price</span></div>
-          <div class="score-slider-wrap"><input class="score-slider" type="range" min="0" max="20" value="0" id="s-bitter" oninput="updateScoreTotal()"><span class="score-val" id="sv-bitter">0</span></div>
-        </div>
-        <div class="score-category">
-          <div class="score-cat-name">Collectability<span>Rarity, desirability</span></div>
-          <div class="score-slider-wrap"><input class="score-slider" type="range" min="0" max="20" value="0" id="s-after" oninput="updateScoreTotal()"><span class="score-val" id="sv-after">0</span></div>
-        </div>
-      </div>
-
-      <div class="form-row">
-        <label>Notes</label>
-        <textarea id="f-notes" placeholder="Thoughts on performance, provenance, restoration notes, where you found it…"></textarea>
-      </div>
-
-      <div class="form-actions">
-        <button class="btn-cancel" onclick="closeFormModal()">Cancel</button>
-        <button class="btn-save" onclick="savePack()">Save Tool</button>
-      </div>
-    </div>
+  <div class="footer-note">
+    * Visual parameters are calculated relative to factory Mitsubishi Triton ML specs (ET+38, 30" Stock Tyre).
   </div>
 </div>
-
-<!-- DETAIL MODAL -->
-<div class="modal-overlay" id="detail-overlay" onclick="overlayClick(event,'detail-overlay')">
-  <div class="modal">
-    <span class="modal-handle"></span>
-    <div class="modal-header">
-      <div class="modal-title">Tool Details</div>
-      <button class="modal-close" onclick="closeDetailModal()">✕</button>
-    </div>
-    <div class="modal-body" id="detail-body"></div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
 
 <script>
-// ─── BRAND DATABASE (Tools) ───────────────────────────────────────────────
-const BRAND_DB=[
-{name:"Stanley",country:"USA",variants:["No.4 Bench Plane","No.5 Jack Plane","No.7 Jointer Plane","No.80 Cabinet Scraper","Sweetheart No.4","Defiance Hammer","FatMax Tape","PowerLock Tape","Yankee Screwdriver","Bailey No.3"]},
-{name:"Lie-Nielsen",country:"USA",variants:["No.4 Bronze Plane","No.62 Low Angle Jack","No.102 Block Plane","No.1 Bench Plane","Skew Rabbet Plane","Shoulder Plane","Scraper Plane","Dovetail Saw","Carcass Saw"]},
-{name:"Veritas",country:"Canada",variants:["Bevel-Up Smoother","Low Angle Jack Plane","Cabinet Scraper","Combination Plane","Shoulder Plane","Router Plane","Marking Gauge","Wheel Marking Gauge","Skew Block Plane"]},
-{name:"Snap-on",country:"USA",variants:["FLANKDRIVE Wrench","3/8 Drive Ratchet","Combination Wrench Set","Torque Wrench","Phillips Screwdriver","Flathead Screwdriver","Pliers Set","Socket Set","Impact Driver"]},
-{name:"Festool",country:"Germany",variants:["TS 55 REQ Track Saw","OF 1400 Router","RO 150 Sander","ETS 150 Orbital Sander","Domino DF 500","CXS Drill","TID 18 Impact Driver","CT 26 Dust Extractor","PS 420 Jigsaw"]},
-{name:"Makita",country:"Japan",variants:["XPH12 Drill","XDT16 Impact Driver","XAG04 Grinder","XRJ05 Reciprocating Saw","XCS03 Circular Saw","XBU02 Blower","XT269M Combo Kit","9403 Belt Sander","BO5041 Orbital Sander"]},
-{name:"DeWalt",country:"USA",variants:["DCD791 Drill","DCF887 Impact Driver","DCS391 Circular Saw","DCG412 Grinder","DCS374 Band Saw","DCS355 Oscillating Tool","DCD996 Hammer Drill","DCS576 Circular Saw","DCB205 Battery"]},
-{name:"Milwaukee",country:"USA",variants:["M18 FUEL Drill","M18 FUEL Impact Driver","M18 FUEL Circular Saw","M18 FUEL Grinder","M12 Ratchet","M18 FUEL Sawzall","M18 FUEL Jigsaw","Packout Toolbox","M18 Heated Jacket"]},
-{name:"Bosch",country:"Germany",variants:["PS31 12V Drill","PS41 12V Impact","GSR18V-190 Drill","GDX18V-200 Impact","GKS18V-57 Circular Saw","GWS18V-45 Grinder","GAS18V-10L Vacuum","GTS18V Table Saw","GLI18V-1900 LED"]},
-{name:"Wera",country:"Germany",variants:["Kraftform Screwdriver","Joker Wrench","Zyklop Ratchet","Hex-Plus Allen Key Set","Phillips Stubby","T-Handle Torx Set","Kompakt Bit Set","Koloss Hammer","BiTorsion Bit"]},
-{name:"Knipex",country:"Germany",variants:["Cobra Pliers","Precision Pliers","Cutters","Needle Nose","Wire Strippers","Lever Action Pliers","TwinForce Pliers","Alligator Pliers","Insulated Pliers"]},
-{name:"Bahco",country:"Sweden",variants:["No.10 Hacksaw","Traditional Handsaw","Ergo Screwdrivers","Adjustable Wrench","Combination Pliers","Wire Cutters","Folding Pruning Saw","ERGO Ratchet","Chisel Set"]},
-{name:"Narex",country:"Czech Republic",variants:["Bevel Edge Chisels","Premium Chisels","Mortise Chisels","Bench Chisels","Wood Mallet","Cabinetmaker Chisels","Extra Thin Chisels"]},
-{name:"Pfeil",country:"Switzerland",variants:["Sweep 1 Straight Gouge","Sweep 2 Flat Gouge","V-Parting Tool","Bent Gouge","Fishtail Chisel","Palm Tools Set","Carving Set"]},
-{name:"Two Cherries",country:"Germany",variants:["Bench Chisels","Mortise Chisels","Carving Chisels","Carving Set","Socket Chisels"]},
-{name:"Estwing",country:"USA",variants:["20oz Claw Hammer","32oz Framing Hammer","Hatchet","Rock Pick","Geology Hammer","Brick Hammer","Straight Claw Hammer","Mallet"]},
-{name:"Vaughan",country:"USA",variants:["20oz Framing Hammer","16oz Claw Hammer","California Framer","T-Bone Framer","Bear Saw Hatchet","Ripping Bar"]},
-{name:"Hultafors",country:"Sweden",variants:["Heavy Duty Claw Hammer","Tack Hammer","Splitting Maul","Roofing Hatchet","Wide Axe","Swedish Axe"]},
-{name:"Gransfors Bruks",country:"Sweden",variants:["Small Forest Axe","Wildlife Hatchet","Scandinavian Forest Axe","American Felling Axe","Splitting Maul","Hunter's Axe","Double Bit Axe"]},
-{name:"Starrett",country:"USA",variants:["No.25 Dial Indicator","Combination Square","Digital Caliper","Steel Rule","Combination Protractor","Depth Gauge","Micrometer","Level"]},
-{name:"Mitutoyo",country:"Japan",variants:["Vernier Caliper","Digital Caliper","Outside Micrometer","Dial Test Indicator","Depth Micrometer","Inside Caliper","Height Gauge","Surface Plate"]},
-{name:"Shinwa",country:"Japan",variants:["Combination Square","Try Square","Marking Gauge","Double Square","Sliding Bevel","Steel Rule","Angle Gauge","Protractor"]},
-{name:"Bridge City Tool Works",country:"Canada",variants:["HP-6 Marking Gauge","HP-10v3 Layout Square","Pairmatch CS-1","Mini-Square","Tri-Gauge","Jointmaker Pro"]},
-{name:"Gyrojet",country:"Japan",variants:["Ryoba Saw","Dozuki Saw","Kataba Saw","Kugihiki Flush-Cut Saw"]},
-{name:"Suizan",country:"Japan",variants:["Ryoba Pull Saw","Dozuki Dovetail Saw","Gyokucho Saw","Keyhole Saw"]},
-{name:"Gyokucho",country:"Japan",variants:["Ryoba 9.5 inch","Dozuki 240mm","Flush Cut Saw","Double Edge Saw"]},
-{name:"Irwin",country:"USA",variants:["Marples Chisels","Speedbor Bits","UNIBIT Step Drill","Bar Clamps","Handsaws","Quick-Grip Clamps","Vise-Grip Pliers","Coping Saw"]},
-{name:"Pony",country:"USA",variants:["Pipe Clamp","Bar Clamp","F-Clamp","Cabinet Master Clamp","Spring Clamp","Corner Clamp"]},
-{name:"Bessey",country:"Germany",variants:["K Body Clamp","TG Clamp","GZ Clamp","GSZ Spring Clamp","D-Clamp","AB Angle Clamp","One-Hand Clamp"]},
-{name:"Jorgensen",country:"USA",variants:["Cabinet Master Clamp","Pipe Clamp","Bar Clamp","Wood Screw Clamp","Speed Clamp"]},
-{name:"Surebonder",country:"USA",variants:["9600 Staple Gun","9700 Staple Gun","Pneumatic Stapler","Electric Stapler"]},
-{name:"Freud",country:"Italy",variants:["Diablo Table Saw Blade","Dado Set","Router Bit Set","Flush Trim Bit","Raised Panel Set","Roundover Bit","Dovetail Bit","Spiral Upcut Bit"]},
-{name:"CMT",country:"Italy",variants:["Combination Blade","Dado Set","Router Bit Set","Slot Cutter","Beading Bit","Edge Profile Bit","Spiral Bit"]},
-{name:"Amana",country:"USA",variants:["Solid Carbide Router Bit","Insertion Router Bit","Slot Cutter","Spiral Upcut","Ogee Fillet Bit"]},
-{name:"Fiskars",country:"Finland",variants:["X7 Hatchet","X27 Splitting Axe","Pro Pruner","PowerGear Loppers","Bypass Pruner","Billhook Saw","Classic Scissors"]},
-{name:"Felco",country:"Switzerland",variants:["No.2 Classic Pruner","No.6 Compact Pruner","No.8 Rotating Handle","No.12 One-Hand Lopper","No.30 Two-Hand Saw","No.600 Vine Scissors"]},
-{name:"ARS",country:"Japan",variants:["320 Folding Saw","Pruning Shears","Long Reach Pruner","Turbocut Folding Saw","Telescopic Pruner"]},
-{name:"Fluke",country:"USA",variants:["115 Multimeter","117 Multimeter","376 Clamp Meter","87V Multimeter","T6-600 Tester","1AC Non-Contact Tester","323 Clamp Meter"]},
-{name:"Klein Tools",country:"USA",variants:["11-in-1 Screwdriver","Lineman Pliers","Side Cutter","Coax Stripper","Fish Tape","Voltage Tester","Wire Stripper","Level","Electrician Scissors"]},
-{name:"Record",country:"UK",variants:["No.044 Plough Plane","No.043 Combination Plane","No.78 Rebate Plane","No.311 Shoulder Plane","No.52 Shooting Plane","Vise No.52"]},
-{name:"Clifton",country:"UK",variants:["No.4 Bench Plane","No.5 Jack Plane","No.41 Block Plane","Shoulder Plane","Rebate Plane","Bullnose Plane"]},
-{name:"Woodpeckers",country:"USA",variants:["Precision Square","Router Fence","Coping Sled","Layout Square","Dovetail Square","Dead Center Punch","One Time Tool"]},
-{name:"iGaging",country:"USA",variants:["Digital Caliper","Origin 35 Marking Gauge","Absolute Depth Gauge","Digital Protractor","IP54 Caliper"]},
-];
+  // UI & Canvas Controls
+  const tabs = document.querySelectorAll('.tab');
+  const views = document.querySelectorAll('.view');
+  
+  const liftSlider = document.getElementById('liftSlider');
+  const liftVal = document.getElementById('liftVal');
+  const tyreSelect = document.getElementById('tyreSelect');
+  const tyreVal = document.getElementById('tyreVal');
+  const offsetSlider = document.getElementById('offsetSlider');
+  const offsetVal = document.getElementById('offsetVal');
+  const widthSelect = document.getElementById('widthSelect');
+  const widthVal = document.getElementById('widthVal');
+  const resetBtn = document.getElementById('resetBtn');
 
-// ─── STATE ────────────────────────────────────────────────────────────────
-const STORE_KEY='toolcollection_v1';
-let collection=[],currentSort='newest',currentView='grid',currentSection='collection',currentFmt='';
-let currentImgDataUrl='',editingId=null,formCondition=0,formIsWishlist=false;
-let _variants=[];
+  const frontWheel = document.getElementById('frontWheel');
+  const rearWheel = document.getElementById('rearWheel');
+  const leftOffset = document.getElementById('leftOffset');
+  const rightOffset = document.getElementById('rightOffset');
 
-function loadData(){try{collection=JSON.parse(localStorage.getItem(STORE_KEY)||'[]');}catch(e){collection=[];}}
-function saveData(){localStorage.setItem(STORE_KEY,JSON.stringify(collection));}
-function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2);}
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function totalScore(p){const s=p.scores||{};return(s.collect||0)+(s.ash||0)+(s.design||0)+(s.bitter||0)+(s.after||0);}
-function scoreClass(n){if(n>=95)return'Exceptional';if(n>=90)return'Outstanding';if(n>=85)return'Excellent';if(n>=80)return'Very Good';if(n>=70)return'Good';if(n>=60)return'Average';if(n>=50)return'Below Avg';return'Poor';}
-function scoreColor(n){if(n>=95)return'#b8860b';if(n>=90)return'#2a7a4a';if(n>=80)return'#2a5a8c';if(n>=60)return'#7a7568';return'#c8472a';}
-function conditionLabel(v){return['','Poor','Fair','Good','Very Good','Mint'][v]||'';}
+  const clearanceOut = document.getElementById('clearanceOut');
+  const trackOut = document.getElementById('trackOut');
+  const scrubOut = document.getElementById('scrubOut');
 
-function updateScoreTotal(){
-  const ids=['collect','ash','design','bitter','after'];let t=0;
-  ids.forEach(k=>{const v=parseInt(document.getElementById('s-'+k).value);t+=v;document.getElementById('sv-'+k).textContent=v;});
-  document.getElementById('form-score-total').textContent=t;
-}
+  // Baseline Hub & Arch Positions matched to uploaded Triton ML images
+  const baseFrontX = 815;
+  const baseRearX = 218;
+  const baseWheelY = 390;
+  const baseRadius = 105;
 
-// ─── THEME ────────────────────────────────────────────────────────────────
-function toggleTheme(){
-  const isDark=document.documentElement.getAttribute('data-theme')==='dark';
-  applyTheme(!isDark);
-}
-function toggleThemeCheck(cb){applyTheme(cb.checked);}
-function applyTheme(dark){
-  document.documentElement.setAttribute('data-theme',dark?'dark':'light');
-  document.getElementById('theme-btn').textContent=dark?'☀️':'🌙';
-  const cb=document.getElementById('tog-dark');if(cb)cb.checked=dark;
-  localStorage.setItem('tool_theme',dark?'dark':'light');
-}
-function initTheme(){
-  const t=localStorage.getItem('tool_theme')||'light';
-  applyTheme(t==='dark');
-}
+  const baseLeftOffset = 125;
+  const baseRightOffset = 495;
 
-// ─── SETTINGS DROPDOWN ───────────────────────────────────────────────────
-function toggleSettings(e){
-  e.stopPropagation();
-  const dd=document.getElementById('settings-dropdown');
-  dd.classList.toggle('open');
-  const tok=localStorage.getItem('tool_ghtoken')||'';
-  const rep=localStorage.getItem('tool_ghrepo')||'';
-  if(tok)document.getElementById('gh-token').value=tok;
-  if(rep)document.getElementById('gh-repo').value=rep;
-  const ak=localStorage.getItem('tool_apikey')||'';
-  if(ak)document.getElementById('api-key-store').value=ak;
-}
-document.addEventListener('click',e=>{
-  if(!e.target.closest('.settings-wrap'))document.getElementById('settings-dropdown').classList.remove('open');
-  if(!e.target.closest('#f-brand')&&!e.target.closest('#brand-ac'))closeAc('brand-ac');
-  if(!e.target.closest('#f-name')&&!e.target.closest('#name-ac'))closeAc('name-ac');
-  ['sort-dd','fmt-dd'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(el&&!e.target.closest('#'+id)&&!e.target.closest('[onclick*="'+id+'"]'))el.classList.remove('open');
-  });
-});
-function saveApiKey(){
-  const v=document.getElementById('api-key-store').value.trim();
-  if(!v){showToast('Enter a key first');return;}
-  localStorage.setItem('tool_apikey',v);
-  showToast('API key saved ✦');
-}
+  // Tab switching logic
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      views.forEach(v => v.classList.remove('active'));
 
-// ─── GITHUB SYNC ─────────────────────────────────────────────────────────
-async function ghPush(){
-  const token=document.getElementById('gh-token').value.trim();
-  const repo=document.getElementById('gh-repo').value.trim();
-  if(!token||!repo){setSyncStatus('Enter token and repo first');return;}
-  localStorage.setItem('tool_ghtoken',token);localStorage.setItem('tool_ghrepo',repo);
-  setSyncStatus('Pushing…');
-  try{
-    const fileRes=await fetch(`https://api.github.com/repos/${repo}/contents/collection.json`,{headers:{'Authorization':`token ${token}`,'Accept':'application/vnd.github.v3+json'}});
-    let sha='';
-    if(fileRes.ok){const fd=await fileRes.json();sha=fd.sha||'';}
-    const content=btoa(unescape(encodeURIComponent(JSON.stringify(collection,null,2))));
-    const body={message:'Update collection',content};if(sha)body.sha=sha;
-    const putRes=await fetch(`https://api.github.com/repos/${repo}/contents/collection.json`,{method:'PUT',headers:{'Authorization':`token ${token}`,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});
-    if(putRes.ok)setSyncStatus('✓ Pushed '+new Date().toLocaleTimeString());
-    else setSyncStatus('Push failed: '+putRes.status);
-  }catch(e){setSyncStatus('Error: '+e.message);}
-}
-async function ghPull(){
-  const token=document.getElementById('gh-token').value.trim();
-  const repo=document.getElementById('gh-repo').value.trim();
-  if(!token||!repo){setSyncStatus('Enter token and repo first');return;}
-  localStorage.setItem('tool_ghtoken',token);localStorage.setItem('tool_ghrepo',repo);
-  setSyncStatus('Pulling…');
-  try{
-    const res=await fetch(`https://api.github.com/repos/${repo}/contents/collection.json`,{headers:{'Authorization':`token ${token}`,'Accept':'application/vnd.github.v3+json'}});
-    if(!res.ok){setSyncStatus('Pull failed: '+res.status);return;}
-    const data=await res.json();
-    const text=decodeURIComponent(escape(atob(data.content.replace(/\n/g,''))));
-    collection=JSON.parse(text);saveData();renderGrid();
-    setSyncStatus('✓ Pulled '+new Date().toLocaleTimeString());showToast('Collection synced');
-  }catch(e){setSyncStatus('Error: '+e.message);}
-}
-function setSyncStatus(msg){document.getElementById('sync-status').textContent=msg;}
-
-// ─── DROPDOWN MENUS ──────────────────────────────────────────────────────
-function toggleDD(id){
-  ['sort-dd','fmt-dd'].forEach(d=>{if(d!==id)document.getElementById(d).classList.remove('open');});
-  document.getElementById(id).classList.toggle('open');
-}
-function setSort(el,sort){
-  currentSort=sort;
-  document.querySelectorAll('#sort-dd .dd-item').forEach(i=>i.classList.remove('selected'));
-  el.classList.add('selected');
-  document.getElementById('sort-btn').textContent='Sort: '+el.textContent;
-  document.getElementById('sort-dd').classList.remove('open');
-  renderGrid();
-}
-function setFmt(el,fmt){
-  currentFmt=fmt;
-  document.querySelectorAll('#fmt-dd .dd-item').forEach(i=>i.classList.remove('selected'));
-  el.classList.add('selected');
-  document.getElementById('fmt-btn').textContent=fmt?'Category: '+fmt:'Category: All';
-  const active=fmt!=='';
-  document.getElementById('fmt-btn').classList.toggle('active-filter',active);
-  document.getElementById('fmt-dd').classList.remove('open');
-  renderGrid();
-}
-
-// ─── SECTION TABS ────────────────────────────────────────────────────────
-function setSection(s){
-  currentSection=s;
-  document.getElementById('sec-collection').classList.toggle('active',s==='collection');
-  document.getElementById('sec-wishlist').classList.toggle('active',s==='wishlist');
-  renderGrid();
-}
-
-// ─── AI AUTOFILL ─────────────────────────────────────────────────────────
-async function aiLookup(){
-  const q=document.getElementById('ai-query').value.trim();
-  if(!q){setAiStatus('Type a brand and tool name first');return;}
-  const apiKey=localStorage.getItem('tool_apikey')||'';
-  if(!apiKey){setAiStatus('Add API key in Settings ⚙ first');return;}
-  const btn=document.getElementById('ai-btn');
-  btn.innerHTML='<span class="spin">↻</span>';btn.disabled=true;
-  setAiStatus('Looking up…');
-  const prompt=`You are a tool encyclopedia. For the tool "${q}", return ONLY a compact JSON object:
-{"brand":"","name":"","variant":"","country":"","format":"Hand Tools|Power Tools|Measuring|Cutting|Fastening|Clamping|Finishing|Garden|Electrical|Automotive|Other","yearMade":"","pricePaid":"","condition":0,"notes":"2 sentences about the tool"}
-No markdown, no explanation. condition is 1-5 (1=Poor, 5=Mint). yearMade and pricePaid are strings.`;
-  try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:400,messages:[{role:'user',content:prompt}]})
+      tab.classList.add('active');
+      const targetView = tab.getAttribute('data-view') === 'side' ? 'sideView' : 'frontView';
+      document.getElementById(targetView).classList.add('active');
     });
-    const data=await res.json();
-    if(data.error){setAiStatus('API error: '+data.error.message);return;}
-    const text=data.content?.map(c=>c.text||'').join('')||'';
-    const p=JSON.parse(text.replace(/```json|```/g,'').trim());
-    if(p.brand)document.getElementById('f-brand').value=p.brand;
-    if(p.name)document.getElementById('f-name').value=p.name;
-    if(p.variant!==undefined)document.getElementById('f-variant').value=p.variant||'';
-    if(p.country)document.getElementById('f-country').value=p.country;
-    if(p.format){const s=document.getElementById('f-format');for(let o of s.options)if(o.value===p.format){s.value=p.format;break;}}
-    if(p.yearMade)document.getElementById('f-tar').value=p.yearMade;
-    if(p.pricePaid)document.getElementById('f-nic').value=p.pricePaid;
-    if(p.condition!=null)setCondition(Math.min(5,Math.max(0,parseInt(p.condition)||0)));
-    if(p.notes)document.getElementById('f-notes').value=p.notes;
-    _variants=(BRAND_DB.find(b=>b.name.toLowerCase()===(p.brand||'').toLowerCase())||{}).variants||[];
-    setAiStatus('✓ Done — edit as needed');showToast('Auto-filled');
-  }catch(e){setAiStatus('Could not load — fill manually');}
-  finally{btn.innerHTML='Auto-fill';btn.disabled=false;}
-}
-function setAiStatus(msg){document.getElementById('ai-status-text').textContent=msg;}
+  });
 
-// ─── AUTOCOMPLETE ─────────────────────────────────────────────────────────
-function onBrandInput(){
-  const q=document.getElementById('f-brand').value.toLowerCase().trim();
-  if(!q){closeAc('brand-ac');return;}
-  const m=BRAND_DB.filter(b=>b.name.toLowerCase().startsWith(q)||b.name.toLowerCase().includes(q)).slice(0,8);
-  if(!m.length){closeAc('brand-ac');return;}
-  document.getElementById('brand-ac').innerHTML=m.map(b=>`<div class="ac-item" onmousedown="pickBrand('${esc(b.name)}','${esc(b.country)}')"><span class="ac-item-name">${esc(b.name)}</span><span class="ac-item-origin">${esc(b.country)}</span></div>`).join('');
-  document.getElementById('brand-ac').classList.add('open');
-}
-function onBrandKey(e){
-  const list=document.getElementById('brand-ac'),items=list.querySelectorAll('.ac-item');
-  if(!list.classList.contains('open'))return;
-  if(e.key==='ArrowDown'){e.preventDefault();const n=Math.min([...items].findIndex(el=>el.classList.contains('focused'))+1,items.length-1);items.forEach((el,i)=>el.classList.toggle('focused',i===n));}
-  else if(e.key==='ArrowUp'){e.preventDefault();const n=Math.max([...items].findIndex(el=>el.classList.contains('focused'))-1,0);items.forEach((el,i)=>el.classList.toggle('focused',i===n));}
-  else if(e.key==='Enter'){const f=list.querySelector('.focused');if(f)f.onmousedown();}
-  else if(e.key==='Escape')closeAc('brand-ac');
-}
-function pickBrand(name,country){
-  document.getElementById('f-brand').value=name;
-  if(!document.getElementById('f-country').value)document.getElementById('f-country').value=country;
-  closeAc('brand-ac');
-  _variants=(BRAND_DB.find(b=>b.name===name)||{}).variants||[];
-  document.getElementById('f-name').focus();
-}
-function onNameFocus(){
-  const brand=document.getElementById('f-brand').value;
-  const found=BRAND_DB.find(b=>b.name.toLowerCase()===brand.toLowerCase());
-  _variants=found?found.variants:[];
-  if(_variants.length)onNameInput();
-}
-function onNameInput(){
-  const q=document.getElementById('f-name').value.toLowerCase().trim();
-  if(!_variants.length){closeAc('name-ac');return;}
-  const m=q?_variants.filter(v=>v.toLowerCase().includes(q)):_variants;
-  if(!m.length){closeAc('name-ac');return;}
-  document.getElementById('name-ac').innerHTML=m.slice(0,8).map(v=>`<div class="ac-item" onmousedown="pickName('${esc(v)}')"><span class="ac-item-name">${esc(v)}</span></div>`).join('');
-  document.getElementById('name-ac').classList.add('open');
-}
-function onNameKey(e){
-  const list=document.getElementById('name-ac'),items=list.querySelectorAll('.ac-item');
-  if(!list.classList.contains('open'))return;
-  if(e.key==='ArrowDown'){e.preventDefault();const n=Math.min([...items].findIndex(el=>el.classList.contains('focused'))+1,items.length-1);items.forEach((el,i)=>el.classList.toggle('focused',i===n));}
-  else if(e.key==='ArrowUp'){e.preventDefault();const n=Math.max([...items].findIndex(el=>el.classList.contains('focused'))-1,0);items.forEach((el,i)=>el.classList.toggle('focused',i===n));}
-  else if(e.key==='Enter'){const f=list.querySelector('.focused');if(f)f.onmousedown();}
-  else if(e.key==='Escape')closeAc('name-ac');
-}
-function pickName(v){document.getElementById('f-name').value=v;closeAc('name-ac');}
-function closeAc(id){document.getElementById(id).classList.remove('open');}
+  // Calculate & update dimensions
+  function updateSpecs() {
+    const liftInches = parseFloat(liftSlider.value);
+    const tyreInches = parseFloat(tyreSelect.value);
+    const offsetMm = parseInt(offsetSlider.value);
+    const widthInches = parseFloat(widthSelect.value);
 
-// ─── WISHLIST TOGGLE ─────────────────────────────────────────────────────
-function toggleWishlist(){
-  formIsWishlist=!formIsWishlist;
-  document.getElementById('wishlist-toggle-label').innerHTML=formIsWishlist
-    ?'Added to <strong style="color:var(--blue)">Wishlist</strong>'
-    :'Add to <strong>Collection</strong>';
-  document.getElementById('wishlist-toggle-icon').textContent=formIsWishlist?'♡':'🔧';
-  document.getElementById('wishlist-toggle-row').style.background=formIsWishlist?'var(--blue-light)':'';
-}
+    // Dynamic Label Output
+    liftVal.textContent = `${liftInches}" (${liftInches * 25}mm)`;
+    tyreVal.textContent = tyreSelect.options[tyreSelect.selectedIndex].text;
+    offsetVal.textContent = `ET${offsetMm >= 0 ? '+' : ''}${offsetMm}`;
+    widthVal.textContent = `${widthInches.toFixed(1)}"`;
 
-// ─── CONDITION ────────────────────────────────────────────────────────────
-function setCondition(v){
-  formCondition=v;
-  document.querySelectorAll('.condition-dot-btn').forEach(btn=>btn.classList.toggle('lit',parseInt(btn.dataset.v)<=v));
-}
+    // Mathematical calculations (Factory benchmark: 30" tyre @ ET+38)
+    const tyreRadiusGainMm = (tyreInches - 30) * 12.7;
+    const totalClearanceGainMm = Math.round((liftInches * 25) + tyreRadiusGainMm);
+    const trackShiftMm = 38 - offsetMm;
 
-// ─── RENDER ──────────────────────────────────────────────────────────────
-function renderGrid(){
-  const grid=document.getElementById('collection-grid');
-  const q=document.getElementById('search-input').value.toLowerCase().trim();
-  const ownedPacks=collection.filter(p=>!p.wishlist);
-  const wishPacks=collection.filter(p=>p.wishlist);
-  document.getElementById('count-collection').textContent=ownedPacks.length;
-  document.getElementById('count-wishlist').textContent=wishPacks.length;
-  let items=currentSection==='wishlist'?[...wishPacks]:[...ownedPacks];
-  if(currentFmt)items=items.filter(p=>p.format===currentFmt);
-  if(q)items=items.filter(p=>(p.brand+p.name+p.variant+p.country+p.notes).toLowerCase().includes(q));
-  if(currentSort==='newest')items.sort((a,b)=>b.addedAt-a.addedAt);
-  else if(currentSort==='score')items.sort((a,b)=>totalScore(b)-totalScore(a));
-  else if(currentSort==='name')items.sort((a,b)=>a.name.localeCompare(b.name));
-  else if(currentSort==='brand')items.sort((a,b)=>a.brand.localeCompare(b.brand));
-  if(!items.length){
-    const isWish=currentSection==='wishlist';
-    grid.innerHTML=`<div class="empty-state"><div class="empty-icon">${isWish?'♡':'🔧'}</div><div class="empty-title">${q?'No results':(isWish?'Wishlist empty':'No tools yet')}</div><div class="empty-sub">${q?'Try a different search':(isWish?'Add a tool and mark it as Wishlist':'Tap "+ Add Tool" to start your workshop archive')}</div></div>`;
-    updateStats();return;
+    clearanceOut.textContent = `+${totalClearanceGainMm} mm`;
+    trackOut.textContent = `${trackShiftMm >= 0 ? '+' : ''}${trackShiftMm} mm`;
+
+    // Scrub Risk Warning Thresholds
+    if (tyreInches >= 33 || offsetMm < 0) {
+      scrubOut.textContent = "HIGH (Trimming Req.)";
+      scrubOut.style.color = "#E8611C";
+    } else if (tyreInches >= 32 || offsetMm < 15) {
+      scrubOut.textContent = "MODERATE";
+      scrubOut.style.color = "#F2C14E";
+    } else {
+      scrubOut.textContent = "LOW";
+      scrubOut.style.color = "#5B8AA6";
+    }
+
+    // SVG Rendering Adjustments
+    // 1. Side Profile Overlay: Wheel size scale & body lift offset
+    const newRadius = baseRadius + (tyreInches - 30) * 8; 
+    const newCenterY = baseWheelY + (liftInches * 7); 
+
+    frontWheel.setAttribute('r', newRadius);
+    frontWheel.setAttribute('cy', newCenterY);
+    rearWheel.setAttribute('r', newRadius);
+    rearWheel.setAttribute('cy', newCenterY);
+
+    // 2. Front Profile Overlay: Track Poke Shift
+    const pokeOffset = (38 - offsetMm) * 0.7;
+    const strokeWidth = 8 + (widthInches - 7) * 3;
+
+    leftOffset.setAttribute('x1', baseLeftOffset - pokeOffset);
+    leftOffset.setAttribute('x2', baseLeftOffset - pokeOffset);
+    leftOffset.setAttribute('stroke-width', strokeWidth);
+
+    rightOffset.setAttribute('x1', baseRightOffset + pokeOffset);
+    rightOffset.setAttribute('x2', baseRightOffset + pokeOffset);
+    rightOffset.setAttribute('stroke-width', strokeWidth);
   }
-  grid.innerHTML=items.map(p=>packCardHTML(p)).join('');
-  updateStats();
-}
 
-function packCardHTML(p){
-  const sc=totalScore(p);
-  const img=p.img?`<img src="${p.img}" alt="${esc(p.brand)}" loading="lazy">`:`<div class="pack-no-img"><div class="pack-no-img-icon">🔧</div><div class="pack-no-img-label">No photo</div></div>`;
-  const badge=p.format?`<div class="pack-badge">${esc(p.format)}</div>`:'';
-  const wishRibbon=p.wishlist?`<div class="wish-ribbon">Wishlist</div>`:'';
-  const scoreEl=sc>0?`<span class="pack-score${sc>=95?' score-exc':sc>=90?' score-out':''}">${sc}</span>`:'';
-  const cdots=[1,2,3,4,5].map(i=>`<span class="cdot${i<=(p.condition||0)?' lit':''}"></span>`).join('');
-  return`<div class="pack-card" onclick="openDetail('${p.id}')">
-    <div class="pack-img-wrap">${img}${badge}${wishRibbon}</div>
-    <div class="pack-info">
-      <div class="pack-brand">${esc(p.brand)}</div>
-      <div class="pack-name">${esc(p.name)}</div>
-      ${p.variant?`<div class="pack-variant">${esc(p.variant)}</div>`:''}
-      <div class="pack-meta">
-        <div class="cond-dots">${cdots}</div>
-        ${scoreEl||`<span class="pack-country">${esc(p.country||'')}</span>`}
-      </div>
-    </div>
-  </div>`;
-}
+  // Event Handlers
+  liftSlider.addEventListener('input', updateSpecs);
+  tyreSelect.addEventListener('change', updateSpecs);
+  offsetSlider.addEventListener('input', updateSpecs);
+  widthSelect.addEventListener('change', updateSpecs);
 
-function updateStats(){
-  document.getElementById('stat-total').textContent=collection.filter(p=>!p.wishlist).length;
-  document.getElementById('stat-brands').textContent=new Set(collection.filter(p=>!p.wishlist).map(p=>p.brand.toLowerCase())).size;
-  const scored=collection.filter(p=>!p.wishlist&&totalScore(p)>0);
-  document.getElementById('stat-avg').textContent=scored.length?(scored.reduce((s,p)=>s+totalScore(p),0)/scored.length).toFixed(0):'—';
-}
+  resetBtn.addEventListener('click', () => {
+    liftSlider.value = 2;
+    tyreSelect.value = "31";
+    offsetSlider.value = 38;
+    widthSelect.value = "7";
+    updateSpecs();
+  });
 
-// ─── RANKINGS ────────────────────────────────────────────────────────────
-function renderRankings(){
-  const list=document.getElementById('rankings-list');
-  const sorted=[...collection].filter(p=>!p.wishlist).sort((a,b)=>totalScore(b)-totalScore(a));
-  if(!sorted.length){list.innerHTML=`<div class="empty-rankings"><div style="font-size:2rem;margin-bottom:10px">🔧</div><div style="font-family:'Playfair Display',serif;font-size:1.1rem">No tools scored yet</div></div>`;return;}
-  list.innerHTML=sorted.map((p,i)=>{
-    const sc=totalScore(p);
-    const img=p.img?`<img class="rank-img" src="${p.img}" alt="">`:`<div class="rank-img-placeholder">🔧</div>`;
-    const scStyle=sc>0?`background:${scoreColor(sc)};color:#fff`:'';
-    const cdots=[1,2,3,4,5].map(n=>`<span class="cdot${n<=(p.condition||0)?' lit':''}"></span>`).join('');
-    return`<div class="ranking-item" onclick="openDetail('${p.id}')">
-      <div class="rank-num${i<3?' gold':''}">${i+1}</div>${img}
-      <div class="rank-info">
-        <div class="rank-brand">${esc(p.brand)}</div>
-        <div class="rank-name">${esc(p.name)}</div>
-        ${p.variant?`<div class="rank-variant">${esc(p.variant)}</div>`:''}
-        <div class="rank-meta"><div class="cond-dots">${cdots}</div><span style="font-size:0.66rem;color:var(--text-faint)">${sc>0?scoreClass(sc):''}</span></div>
-      </div>
-      <div class="rank-score-big" style="${scStyle}">${sc>0?sc:'—'}</div>
-    </div>`;
-  }).join('');
-}
-
-// ─── TABS ────────────────────────────────────────────────────────────────
-function switchTab(tab){
-  document.getElementById('tab-collection').classList.toggle('active',tab==='collection');
-  document.getElementById('tab-rankings').classList.toggle('active',tab==='rankings');
-  document.getElementById('collection-panel').classList.toggle('hidden',tab!=='collection');
-  document.getElementById('rankings-panel').classList.toggle('active',tab==='rankings');
-  if(tab==='rankings')renderRankings();
-}
-function setView(v){
-  currentView=v;
-  document.getElementById('collection-grid').classList.toggle('list-view',v==='list');
-  document.getElementById('vbtn-grid').classList.toggle('active',v==='grid');
-  document.getElementById('vbtn-list').classList.toggle('active',v==='list');
-}
-
-// ─── FORM ────────────────────────────────────────────────────────────────
-function openAddModal(){
-  editingId=null;document.getElementById('form-modal-title').textContent='Add New Tool';
-  clearForm();document.getElementById('form-overlay').classList.add('open');
-}
-function openEditModal(id){
-  const p=collection.find(x=>x.id===id);if(!p)return;
-  editingId=id;document.getElementById('form-modal-title').textContent='Edit Tool';
-  document.getElementById('f-brand').value=p.brand||'';
-  document.getElementById('f-name').value=p.name||'';
-  document.getElementById('f-variant').value=p.variant||'';
-  document.getElementById('f-country').value=p.country||'';
-  document.getElementById('f-format').value=p.format||'';
-  document.getElementById('f-acquired').value=p.acquired||'';
-  document.getElementById('f-notes').value=p.notes||'';
-  document.getElementById('f-tar').value=p.yearMade||'';
-  document.getElementById('f-nic').value=p.pricePaid||'';
-  const sc=p.scores||{};
-  ['collect','ash','design','bitter','after'].forEach(k=>{const el=document.getElementById('s-'+k);if(el)el.value=sc[k]||0;});
-  updateScoreTotal();
-  setCondition(p.condition||0);
-  formIsWishlist=p.wishlist||false;
-  if(formIsWishlist){
-    document.getElementById('wishlist-toggle-label').innerHTML='Added to <strong style="color:var(--blue)">Wishlist</strong>';
-    document.getElementById('wishlist-toggle-icon').textContent='♡';
-    document.getElementById('wishlist-toggle-row').style.background='var(--blue-light)';
-  }
-  currentImgDataUrl=p.img||'';
-  if(p.img){
-    const prev=document.getElementById('img-preview');
-    prev.src=p.img;prev.classList.add('show');
-  }
-  closeDetailModal();
-  document.getElementById('form-overlay').classList.add('open');
-}
-function clearForm(){
-  ['f-brand','f-name','f-variant','f-country','f-acquired','f-notes','f-tar','f-nic'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('f-format').value='';
-  ['collect','ash','design','bitter','after'].forEach(k=>{document.getElementById('s-'+k).value=0;document.getElementById('sv-'+k).textContent=0;});
-  document.getElementById('form-score-total').textContent=0;
-  setCondition(0);
-  formIsWishlist=false;
-  document.getElementById('wishlist-toggle-label').innerHTML='Add to <strong>Collection</strong>';
-  document.getElementById('wishlist-toggle-icon').textContent='🔧';
-  document.getElementById('wishlist-toggle-row').style.background='';
-  document.getElementById('ai-query').value='';
-  document.getElementById('ai-status-text').textContent='Type brand + tool name, hit Auto-fill';
-  currentImgDataUrl='';
-  const prev=document.getElementById('img-preview');prev.src='';prev.classList.remove('show');
-  _variants=[];
-}
-function closeFormModal(){document.getElementById('form-overlay').classList.remove('open');}
-
-function handleImgUpload(e){
-  const file=e.target.files[0];if(!file)return;
-  const reader=new FileReader();
-  reader.onload=ev=>{
-    currentImgDataUrl=ev.target.result;
-    const prev=document.getElementById('img-preview');
-    prev.src=currentImgDataUrl;prev.classList.add('show');
-  };
-  reader.readAsDataURL(file);
-}
-
-function savePack(){
-  const brand=document.getElementById('f-brand').value.trim();
-  const name=document.getElementById('f-name').value.trim();
-  if(!brand||!name){showToast('Brand and tool name required');return;}
-  const scores={
-    collect:parseInt(document.getElementById('s-collect').value)||0,
-    ash:parseInt(document.getElementById('s-ash').value)||0,
-    design:parseInt(document.getElementById('s-design').value)||0,
-    bitter:parseInt(document.getElementById('s-bitter').value)||0,
-    after:parseInt(document.getElementById('s-after').value)||0
-  };
-  const pack={
-    id:editingId||uid(),brand,name,
-    variant:document.getElementById('f-variant').value.trim(),
-    country:document.getElementById('f-country').value.trim(),
-    format:document.getElementById('f-format').value,
-    acquired:document.getElementById('f-acquired').value.trim(),
-    notes:document.getElementById('f-notes').value.trim(),
-    yearMade:document.getElementById('f-tar').value.trim(),
-    pricePaid:document.getElementById('f-nic').value.trim(),
-    condition:formCondition,wishlist:formIsWishlist,scores,
-    img:currentImgDataUrl||'',
-    addedAt:editingId?(collection.find(x=>x.id===editingId)||{}).addedAt||Date.now():Date.now()
-  };
-  if(editingId){
-    const idx=collection.findIndex(x=>x.id===editingId);
-    if(idx>=0)collection[idx]=pack;
-  }else{
-    collection.unshift(pack);
-  }
-  saveData();renderGrid();closeFormModal();
-  showToast(editingId?'Tool updated':'Tool added ✦');
-}
-
-// ─── DETAIL MODAL ────────────────────────────────────────────────────────
-function openDetail(id){
-  const p=collection.find(x=>x.id===id);if(!p)return;
-  const sc=totalScore(p);
-  const scores=p.scores||{};
-  const cdots=[1,2,3,4,5].map(i=>`<span class="cdot${i<=(p.condition||0)?' lit':''}"></span>`).join('');
-  document.getElementById('detail-body').innerHTML=`
-    ${p.img?`<img class="detail-img" src="${p.img}" alt="">`:`<div class="detail-img-placeholder">🔧</div>`}
-    <div class="detail-brand">${esc(p.brand)}</div>
-    <div class="detail-name">${esc(p.name)}</div>
-    ${p.variant?`<div class="detail-variant">${esc(p.variant)}</div>`:''}
-    ${p.wishlist?`<div class="detail-wish-badge">♡ Wishlist</div>`:''}
-    <div class="detail-grid">
-      ${p.format?`<div class="detail-field"><div class="detail-field-label">Category</div><div class="detail-field-val">${esc(p.format)}</div></div>`:''}
-      ${p.country?`<div class="detail-field"><div class="detail-field-label">Origin</div><div class="detail-field-val">${esc(p.country)}</div></div>`:''}
-      ${p.yearMade?`<div class="detail-field"><div class="detail-field-label">Year Made</div><div class="detail-field-val">${esc(p.yearMade)}</div></div>`:''}
-      ${p.pricePaid?`<div class="detail-field"><div class="detail-field-label">Price Paid</div><div class="detail-field-val">${esc(p.pricePaid)}</div></div>`:''}
-      ${p.acquired?`<div class="detail-field"><div class="detail-field-label">Source</div><div class="detail-field-val">${esc(p.acquired)}</div></div>`:''}
-      ${p.condition?`<div class="detail-field"><div class="detail-field-label">Condition</div><div class="detail-field-val">${conditionLabel(p.condition)}<div style="display:flex;gap:3px;margin-top:3px">${cdots}</div></div></div>`:''}
-    </div>
-    ${p.notes?`<div class="detail-notes">${esc(p.notes)}</div>`:''}
-    ${sc>0?`<div class="score-breakdown">
-      <div class="score-breakdown-title">Score Breakdown</div>
-      <div class="score-bar-row"><span class="score-bar-label">Build Quality</span><div class="score-bar-track"><div class="score-bar-fill" style="width:${(scores.collect||0)*5}%"></div></div><span class="score-bar-val">${scores.collect||0}</span></div>
-      <div class="score-bar-row"><span class="score-bar-label">Functionality</span><div class="score-bar-track"><div class="score-bar-fill" style="width:${(scores.ash||0)*5}%"></div></div><span class="score-bar-val">${scores.ash||0}</span></div>
-      <div class="score-bar-row"><span class="score-bar-label">Ergonomics</span><div class="score-bar-track"><div class="score-bar-fill" style="width:${(scores.design||0)*5}%"></div></div><span class="score-bar-val">${scores.design||0}</span></div>
-      <div class="score-bar-row"><span class="score-bar-label">Value</span><div class="score-bar-track"><div class="score-bar-fill" style="width:${(scores.bitter||0)*5}%"></div></div><span class="score-bar-val">${scores.bitter||0}</span></div>
-      <div class="score-bar-row"><span class="score-bar-label">Collectability</span><div class="score-bar-track"><div class="score-bar-fill" style="width:${(scores.after||0)*5}%"></div></div><span class="score-bar-val">${scores.after||0}</span></div>
-      <div class="big-score"><span class="big-score-num">${sc}</span><span class="big-score-denom">/100 — ${scoreClass(sc)}</span></div>
-    </div>`:''}
-    <div class="detail-actions">
-      <button class="btn-edit" onclick="openEditModal('${p.id}')">Edit</button>
-      <button class="btn-delete" onclick="deletePack('${p.id}')">Delete</button>
-    </div>
-  `;
-  document.getElementById('detail-overlay').classList.add('open');
-}
-function closeDetailModal(){document.getElementById('detail-overlay').classList.remove('open');}
-function deletePack(id){
-  if(!confirm('Delete this tool?'))return;
-  collection=collection.filter(x=>x.id!==id);
-  saveData();renderGrid();closeDetailModal();showToast('Tool removed');
-}
-
-// ─── OVERLAY CLICK ───────────────────────────────────────────────────────
-function overlayClick(e,id){if(e.target.id===id)document.getElementById(id).classList.remove('open');}
-
-// ─── TOAST ───────────────────────────────────────────────────────────────
-let toastTimer;
-function showToast(msg){
-  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
-  clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2200);
-}
-
-// ─── INIT ─────────────────────────────────────────────────────────────────
-initTheme();loadData();renderGrid();
+  // Run initial calibration
+  updateSpecs();
 </script>
+
 </body>
 </html>
